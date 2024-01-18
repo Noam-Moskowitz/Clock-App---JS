@@ -1,0 +1,341 @@
+//timer
+function hide(element) {
+    element.style.display = `none`;
+}
+function display(element) {
+    element.style.display = `block`;
+}
+
+
+const pauseBtn = document.getElementById(`pauseBtn`);
+const resumeBtn = document.getElementById(`resumeBtn`);
+const timerScreen = document.getElementById(`countdown-screen`)
+const timerForm = document.getElementById(`timer-form`);
+let timerStop = false;
+let timerInterval;
+
+
+function timer(duration) {
+    timerInterval = setInterval(() => {
+        if (!timerStop) {
+            duration--
+            let durationInMins = Math.floor(duration / 60);
+            let leftOverScnds = duration % 60;
+            let hrs = Math.floor(durationInMins / 60)
+            let leftOverMins = durationInMins % 60;
+            if (duration <= 0) {
+                stopTimer(timerInterval)
+                setTimeout(() => { alert(`Time's up!`) }, 1000)
+            }
+            let timeToDisplay = `${hrs.toString().padStart(2, `0`)}:${leftOverMins.toString().padStart(2, `0`)}:${leftOverScnds.toString().padStart(2, `0`)}`;
+            document.getElementById(`timer-screen`).textContent = timeToDisplay
+        }
+    }, 1000)
+}
+
+document.getElementById(`startBtn`).addEventListener('click', (event) => {
+    display(timerScreen);
+    hide(timerForm);
+    event.preventDefault()
+    timerStop = false;
+    let hrs = event.target.form[0].value;
+    let mns = event.target.form[1].value;
+    let scnds = event.target.form[2].value;
+    let hrsInSeconds = hrs * 60 * 60;
+    let mnsInSeconds = mns * 60;
+    let duration = hrsInSeconds + mnsInSeconds + Number(scnds)
+    timer(duration)
+})
+
+document.getElementById(`clearBtn`).addEventListener(`click`, () => {
+    timerStop = true;
+    clearInterval(timerInterval);
+    document.getElementById(`timer-screen`).textContent = ``;
+    hide(timerScreen);
+    hide(resumeBtn);
+    display(timerForm);
+    display(pauseBtn);
+})
+pauseBtn.addEventListener(`click`, () => {
+    timerStop = true;
+    hide(pauseBtn);
+    display(resumeBtn);
+})
+resumeBtn.addEventListener(`click`, () => {
+    timerStop = false;
+    hide(resumeBtn);
+    display(pauseBtn);
+})
+
+//worldClock
+import { Clock } from "./scripts/worldClock.js";
+const wcSubmit = document.getElementById(`wcSubmit`);
+
+wcSubmit.addEventListener(`click`, (event) => {
+    event.preventDefault()
+    addClock(event.target.form[0].value)
+})
+async function addClock(fetchData) {
+    let timezone = await getData(fetchData);
+    let timezoneOffset = timezone.utc_offset;
+    const offsetNum = splitText(timezoneOffset);
+    const clockName = splitText(fetchData);
+    newInstance(clockName, offsetNum)
+
+}
+function createHour(offset) {
+    const time = new Date();
+    const utcHrs = time.getHours() - 2;
+    let hour = utcHrs + offset;
+    switch (hour) {
+        case -1:
+            hour = 23;
+            break;
+        case -2:
+            hour = 22;
+            break;
+        case -3:
+            hour = 21;
+            break;
+        case -4:
+            hour = 20;
+            break;
+        case -5:
+            hour = 19;
+            break;
+        case -6:
+            hour = 18;
+            break;
+        case -7:
+            hour = 17;
+            break;
+        case -8:
+            hour = 16;
+            break;
+        case -9:
+            hour = 15;
+            break;
+        case -10:
+            hour = 14;
+            break;
+        case -11:
+            hour = 13;
+            break;
+        case -12:
+            hour = 12;
+            break;
+        case 24:
+            hour = 0;
+            break;
+        case 25:
+            hour = 1;
+            break;
+        case 26:
+            hour = 2;
+            break;
+        case 27:
+            hour = 3;
+            break;
+        case 28:
+            hour = 4;
+            break;
+        case 29:
+            hour = 5;
+            break;
+        case 30:
+            hour = 6;
+            break;
+        case 31:
+            hour = 7;
+            break;
+        case 32:
+            hour = 8;
+            break;
+        case 33:
+            hour = 9;
+            break;
+        case 34:
+            hour = 10;
+            break;
+        case 35:
+            hour = 11;
+            break;
+        case 36:
+            hour = 12;
+            break;
+        case 37:
+            hour = 13;
+            break;
+        case 38:
+            hour = 14;
+            break;
+
+    }
+    return hour;
+}
+
+setInterval(displayClock, 1000)
+function displayClock() {
+    const time = new Date();
+    const mns = time.getMinutes().toString().padStart(2, `0`);
+    const scnds = time.getSeconds().toString().padStart(2, `0`);
+    let html = ``;
+    let clocks = JSON.parse(localStorage.getItem(`clocks`));
+    for (let clock of clocks) {
+        let hour = createHour(clock.utcOffset)
+        html += `<tr>
+         <td>${clock.city}</td>
+         <td>${hour}:${mns}:${scnds}</td>
+         </tr>`
+        document.getElementById(`clocks-container`).innerHTML = html
+    }
+}
+
+function newInstance(city, utcOffset) {
+    const newClock = new Clock(city, utcOffset);
+    const existingData = JSON.parse(localStorage.getItem('clocks')) || [];
+    let isDuplicate = false;
+
+    for (let i of existingData) {
+        if (i.city === newClock.city && i.utcOffset === newClock.utcOffset) {
+            isDuplicate = true;
+            break;
+        }
+    }
+
+    if (!isDuplicate) {
+        existingData.push(newClock);
+    }
+
+    console.log(existingData);
+    localStorage.setItem('clocks', JSON.stringify(existingData));
+}
+
+
+function splitText(text) {
+    if (text.indexOf(`/`) == -1) {
+        let offsetNum = Number(text.slice(0, 3))
+        console.log(offsetNum);
+        return offsetNum
+    } else {
+        let clockNamearr = text.split(`/`)
+        let clockName = clockNamearr[clockNamearr.length - 1]
+        console.log(clockName);
+        return clockName
+    }
+
+}
+
+async function getData(data) {
+    let response = await fetch(`https://worldtimeapi.org/api/timezone/${data}`);
+    if (response.ok) {
+        return response.json();
+    } else {
+        console.log(response.statusText);
+    }
+}
+
+
+//stopwatch
+let stopwatchScreen = document.getElementById(`stopwatch-screen`);
+let lapContainer = document.getElementById(`laps-container`);
+let stopwatchStart = document.getElementById(`startSwBtn`);
+let stopwatchLap = document.getElementById(`LapBtn`);
+let stopwatchStop = document.getElementById(`stopSwBtn`);
+let stopwatchReset = document.getElementById(`resetBtn`);
+let stopwatchResume = document.getElementById(`resumeSwBtn`);
+
+let lapCounter = 1;
+let lapMillieSeconds = 0;
+let lapSeconds = 0;
+let lapMinutes = 0;
+let counterStop = true;
+let swMillieSeconds = 0;
+let swSeconds = 0;
+let swMinutes = 0;
+
+
+function reset() {
+    stopwatchScreen.innerHTML = ``;
+    lapContainer.innerHTML = ``;
+    swMillieSeconds = 0;
+    swSeconds = 0;
+    swMinutes = 0;
+    lapMillieSeconds = 0
+    lapSeconds = 0;
+    lapMinutes = 0;
+}
+function startCount() {
+
+    setInterval(() => {
+        if (!counterStop) {
+            swMillieSeconds++;
+            if (swMillieSeconds == 100) {
+                swMillieSeconds = 0
+                swSeconds++;
+            } else if (swSeconds == 60 && swMillieSeconds == 100) {
+                swMinutes++;
+            }
+            stopwatchScreen.textContent = `${swMinutes.toString().padStart(2, `0`)}:${swSeconds.toString().padStart(2, `0`)}.${swMillieSeconds.toString().padStart(2, `0`)}`
+        }
+
+    }, 10)
+}
+function displayLap() {
+    let lapInterval = setInterval(() => {
+        if (!counterStop) {
+            lapMillieSeconds++;
+            if (lapMillieSeconds == 100) {
+                lapMillieSeconds = 0
+                lapSeconds++;
+            } else if (lapSeconds == 60 && lapMillieSeconds == 100) {
+                lapMinutes++;
+            }
+            lapTime = `${lapMinutes.toString().padStart(2, `0`)}:${lapSeconds.toString().padStart(2, `0`)}.${lapMillieSeconds.toString().padStart(2, `0`)}`
+        }
+    }, 10)
+    let lapHtml = `Lap ${lapCounter}     ${lapTime}<br> `
+    lapContainer.innerHTML += lapHtml;
+    lapCounter++;
+    clearInterval(lapInterval)
+}
+
+stopwatchStart.addEventListener(`click`, () => {
+    hide(stopwatchStart);
+    display(stopwatchStop);
+    counterStop = false;
+});
+stopwatchLap.addEventListener(`click`, () => {
+    displayLap();
+    lapMillieSeconds = 0;
+    lapSeconds = 0;
+    lapMinutes = 0;
+})
+stopwatchStop.addEventListener(`click`, () => {
+    hide(stopwatchStop);
+    hide(stopwatchLap);
+    display(stopwatchResume);
+    display(stopwatchReset);
+    counterStop = true;
+})
+
+stopwatchResume.addEventListener(`click`, () => {
+    hide(stopwatchResume);
+    hide(stopwatchReset);
+    display(stopwatchStop);
+    display(stopwatchLap);
+    counterStop = false;
+})
+
+stopwatchReset.addEventListener(`click`, () => {
+    hide(stopwatchResume);
+    hide(stopwatchReset);
+    display(stopwatchStart);
+    display(stopwatchLap);
+    reset();
+})
+
+startCount();
+displayLap();
+
+

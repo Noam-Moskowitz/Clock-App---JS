@@ -1,0 +1,61 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.timer,
+.stopwatch,
+.world-clock {
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.time-input {
+    width: 50px;
+    padding: 5px;
+}
+
+#timer-screen,
+#stopwatch-screen {
+    height: 80px;
+    background-color: lightblue;
+}
+
+#resumeBtn,
+#countdown-screen,
+#resetBtn,
+#stopSwBtn,
+#resumeSwBtn {
+    display: none;
+}
+
+#stopwatch-screen {
+    width: 200px;
+}
+
+
+
+table {
+    width: 100%;
+    border: 1px solid #000;
+    margin-top: 20px;
+}
+
+tr {
+    border-bottom: 1px solid #000;
+    padding: 15px;
+}
+
+td {
+    padding: 10px;
+}
