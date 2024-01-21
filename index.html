@@ -61,7 +61,11 @@
     <div class="container-fluid world-clock">
         <div class="content-container">
             <div class="search">
-                <form name="countries-form">
+                <div class="d-flex justify-content-around align-items-center p-2">
+                    <div id="edit" class="btn btn-danger">Edit</div>
+                    <div id="add" class="btn btn-success">+</div>
+                </div>
+                <form id="addClock" name="countries-form">
                     <input class="p-1" list="countries">
                     <datalist id="countries">
                         <option value=Africa/Abidjan></option>
@@ -378,6 +382,10 @@
 
                     </datalist>
                     <input id="wcSubmit" class="btn btn-info" type="submit" value="Add">
+                </form>
+                <form id="removeClock">
+                    <input class="p-1" id="delInput" type="text">
+                    <input id="del" class="btn btn-danger" type="submit" value="Delete">
                 </form>
                 <table>
                     <tbody id="clocks-container"></tbody>

@@ -43,7 +43,10 @@
     width: 200px;
 }
 
-
+#addClock,
+#removeClock {
+    display: none;
+}
 
 table {
     width: 100%;

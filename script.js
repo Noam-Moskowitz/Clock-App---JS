@@ -70,11 +70,53 @@ resumeBtn.addEventListener(`click`, () => {
 //worldClock
 import { Clock } from "./scripts/worldClock.js";
 const wcSubmit = document.getElementById(`wcSubmit`);
+const delBtn = document.getElementById(`del`);
+const addBtn = document.getElementById(`add`);
+const editBtn = document.getElementById(`edit`);
+const addForm = document.getElementById(`addClock`);
+const deleteForm = document.getElementById(`removeClock`);
+
+addBtn.addEventListener(`click`, () => {
+    hide(addBtn);
+    hide(editBtn);
+    display(addForm);
+})
+editBtn.addEventListener(`click`, () => {
+    hide(addBtn);
+    hide(editBtn);
+    display(deleteForm);
+})
 
 wcSubmit.addEventListener(`click`, (event) => {
     event.preventDefault()
     addClock(event.target.form[0].value)
+    event.target.form.reset()
+    hide(addForm)
+    display(addBtn)
+    display(editBtn)
 })
+
+delBtn.addEventListener(`click`, (event) => {
+    event.preventDefault()
+    removeClock(event.target.form[0].value);
+    event.target.form.reset()
+    hide(deleteForm)
+    display(addBtn)
+    display(editBtn)
+})
+
+function removeClock(cityName) {
+    const firstLetter = cityName.charAt(0).toUpperCase();
+    const remainder = cityName.slice(1);
+    cityName = firstLetter + remainder;
+    const clocksArray = JSON.parse(localStorage.getItem('clocks')) || [];
+    const indexToRemove = clocksArray.findIndex(obj => obj.city === cityName);
+    if (indexToRemove !== -1) {
+        clocksArray.splice(indexToRemove, 1);
+        localStorage.setItem('clocks', JSON.stringify(clocksArray));
+    }
+}
+
 async function addClock(fetchData) {
     let timezone = await getData(fetchData);
     let timezoneOffset = timezone.utc_offset;
@@ -182,12 +224,12 @@ function displayClock() {
     let html = ``;
     let clocks = JSON.parse(localStorage.getItem(`clocks`));
     for (let clock of clocks) {
-        let hour = createHour(clock.utcOffset)
+        let hour = createHour(clock.utcOffset).toString().padStart(2, `0`);
         html += `<tr>
          <td>${clock.city}</td>
          <td>${hour}:${mns}:${scnds}</td>
          </tr>`
-        document.getElementById(`clocks-container`).innerHTML = html
+        document.getElementById(`clocks-container`).innerHTML = html;
     }
 }
 
@@ -207,7 +249,6 @@ function newInstance(city, utcOffset) {
         existingData.push(newClock);
     }
 
-    console.log(existingData);
     localStorage.setItem('clocks', JSON.stringify(existingData));
 }
 
@@ -215,13 +256,16 @@ function newInstance(city, utcOffset) {
 function splitText(text) {
     if (text.indexOf(`/`) == -1) {
         let offsetNum = Number(text.slice(0, 3))
-        console.log(offsetNum);
         return offsetNum
     } else {
-        let clockNamearr = text.split(`/`)
-        let clockName = clockNamearr[clockNamearr.length - 1]
-        console.log(clockName);
-        return clockName
+        const clockNameArr = text.split(`/`)
+        let cityName = clockNameArr[clockNameArr.length - 1];
+        if (cityName.indexOf(`_`) == -1) {
+        } else {
+            let cityNameArr = cityName.split(`_`);
+            cityName = `${cityNameArr[0]} ${cityNameArr[1]}`
+        }
+        return cityName
     }
 
 }
@@ -253,7 +297,20 @@ let counterStop = true;
 let swMillieSeconds = 0;
 let swSeconds = 0;
 let swMinutes = 0;
+let lapTime;
 
+let lapInterval = setInterval(() => {
+    if (!counterStop) {
+        lapMillieSeconds++;
+        if (lapMillieSeconds == 100) {
+            lapMillieSeconds = 0
+            lapSeconds++;
+        } else if (lapSeconds == 60 && lapMillieSeconds == 100) {
+            lapMinutes++;
+        }
+        lapTime = `${lapMinutes.toString().padStart(2, `0`)}:${lapSeconds.toString().padStart(2, `0`)}.${lapMillieSeconds.toString().padStart(2, `0`)}`
+    }
+}, 10)
 
 function reset() {
     stopwatchScreen.innerHTML = ``;
@@ -282,22 +339,9 @@ function startCount() {
     }, 10)
 }
 function displayLap() {
-    let lapInterval = setInterval(() => {
-        if (!counterStop) {
-            lapMillieSeconds++;
-            if (lapMillieSeconds == 100) {
-                lapMillieSeconds = 0
-                lapSeconds++;
-            } else if (lapSeconds == 60 && lapMillieSeconds == 100) {
-                lapMinutes++;
-            }
-            lapTime = `${lapMinutes.toString().padStart(2, `0`)}:${lapSeconds.toString().padStart(2, `0`)}.${lapMillieSeconds.toString().padStart(2, `0`)}`
-        }
-    }, 10)
-    let lapHtml = `Lap ${lapCounter}     ${lapTime}<br> `
+    let lapHtml = `Lap ${lapCounter}     ${lapTime}<br>`
     lapContainer.innerHTML += lapHtml;
     lapCounter++;
-    clearInterval(lapInterval)
 }
 
 stopwatchStart.addEventListener(`click`, () => {
@@ -336,6 +380,5 @@ stopwatchReset.addEventListener(`click`, () => {
 })
 
 startCount();
-displayLap();
 
 
