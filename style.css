@@ -114,12 +114,12 @@ td {
 
 .nav-icon {
     width: 80px;
-    padding: 12px;
+    padding: 20px;
     transition: all .3s;
 }
 
 .nav-icon:hover {
-    padding: 16px;
+    padding: 17px;
     cursor: pointer;
 }
 
