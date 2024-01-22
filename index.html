@@ -10,11 +10,14 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="container-fluid timer d-flex">
+    <div class="timer">
         <div class="content-container">
             <div id="timer-form">
                 <form class="d-flex flex-column " name="timer-form">
@@ -45,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid stopwatch d-flex">
+    <div class="stopwatch">
         <div class="content-container">
             <div id="stopwatch-screen" class="d-flex align-items-center justify-content-center"></div>
             <div class="button-container d-flex">
@@ -58,7 +61,7 @@
             <div id="laps-container" class="laps-container d-flex flex-column"></div>
         </div>
     </div>
-    <div class="container-fluid world-clock">
+    <div class="world-clock">
         <div class="content-container">
             <div class="search">
                 <div class="d-flex justify-content-around align-items-center p-2">
@@ -390,6 +393,19 @@
                 <table>
                     <tbody id="clocks-container"></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+    <div class="nav d-flex align-items-center justify-content-center p-2">
+        <div class="icon-container d-flex align-items-center justify-content-around">
+            <div id="timer-icon" class="nav-icon">
+                <img src="./images/hourglass-start-svgrepo-com.svg" alt="">
+            </div>
+            <div id="clock-icon" class="nav-icon active">
+                <img src="./images/clock-two-svgrepo-com.svg" alt="">
+            </div>
+            <div id="stopwatch-icon" class="nav-icon">
+                <img src="./images/stopwatch-svgrepo-com.svg" alt="">
             </div>
         </div>
     </div>

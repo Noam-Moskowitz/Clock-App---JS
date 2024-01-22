@@ -1,4 +1,3 @@
-//timer
 function hide(element) {
     element.style.display = `none`;
 }
@@ -6,7 +5,42 @@ function display(element) {
     element.style.display = `block`;
 }
 
+//navbar
+const timerContainer = document.querySelector(`.timer`);
+const clockContainer = document.querySelector(`.world-clock`);
+const stopwatchContainer = document.querySelector(`.stopwatch`);
+function removeActive() {
+    document.getElementById(`timer-icon`).classList.remove(`active`)
+    document.getElementById(`clock-icon`).classList.remove(`active`)
+    document.getElementById(`stopwatch-icon`).classList.remove(`active`)
+}
 
+
+document.getElementById(`timer-icon`).addEventListener(`click`, (event) => {
+    removeActive()
+    display(timerContainer)
+    hide(clockContainer)
+    hide(stopwatchContainer)
+    document.getElementById(`timer-icon`).classList.add(`active`);
+})
+document.getElementById(`clock-icon`).addEventListener(`click`, (event) => {
+    removeActive()
+    display(clockContainer)
+    hide(stopwatchContainer)
+    hide(timerContainer)
+    document.getElementById(`clock-icon`).classList.add(`active`);
+})
+document.getElementById(`stopwatch-icon`).addEventListener(`click`, (event) => {
+    removeActive()
+    display(stopwatchContainer)
+    hide(timerContainer)
+    hide(clockContainer)
+    document.getElementById(`stopwatch-icon`).classList.add(`active`);
+})
+
+
+
+//timer
 const pauseBtn = document.getElementById(`pauseBtn`);
 const resumeBtn = document.getElementById(`resumeBtn`);
 const timerScreen = document.getElementById(`countdown-screen`)
@@ -321,6 +355,7 @@ function reset() {
     lapMillieSeconds = 0
     lapSeconds = 0;
     lapMinutes = 0;
+    lapCounter = 1;
 }
 function startCount() {
 
@@ -339,7 +374,7 @@ function startCount() {
     }, 10)
 }
 function displayLap() {
-    let lapHtml = `Lap ${lapCounter}     ${lapTime}<br>`
+    let lapHtml = `<div class='lap-text'>Lap ${lapCounter}     ${lapTime}</div>`
     lapContainer.innerHTML += lapHtml;
     lapCounter++;
 }
