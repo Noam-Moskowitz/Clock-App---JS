@@ -15,7 +15,6 @@ function removeActive() {
     document.getElementById(`stopwatch-icon`).classList.remove(`active`)
 }
 
-
 document.getElementById(`timer-icon`).addEventListener(`click`, (event) => {
     removeActive()
     display(timerContainer)
@@ -38,8 +37,6 @@ document.getElementById(`stopwatch-icon`).addEventListener(`click`, (event) => {
     document.getElementById(`stopwatch-icon`).classList.add(`active`);
 })
 
-
-
 //timer
 const pauseBtn = document.getElementById(`pauseBtn`);
 const resumeBtn = document.getElementById(`resumeBtn`);
@@ -47,7 +44,6 @@ const timerScreen = document.getElementById(`countdown-screen`)
 const timerForm = document.getElementById(`timer-form`);
 let timerStop = false;
 let timerInterval;
-
 
 function timer(duration) {
     timerInterval = setInterval(() => {
@@ -140,14 +136,13 @@ delBtn.addEventListener(`click`, (event) => {
 })
 
 function removeClock(cityName) {
-    const firstLetter = cityName.charAt(0).toUpperCase();
-    const remainder = cityName.slice(1);
-    cityName = firstLetter + remainder;
     const clocksArray = JSON.parse(localStorage.getItem('clocks')) || [];
-    const indexToRemove = clocksArray.findIndex(obj => obj.city === cityName);
+    const indexToRemove = clocksArray.findIndex(obj => obj.city.trim().toLowerCase() === cityName.trim().toLowerCase());
     if (indexToRemove !== -1) {
         clocksArray.splice(indexToRemove, 1);
         localStorage.setItem('clocks', JSON.stringify(clocksArray));
+    } else {
+        alert(`You dont have any clocks that match '${cityName}'`)
     }
 }
 
@@ -157,8 +152,8 @@ async function addClock(fetchData) {
     const offsetNum = splitText(timezoneOffset);
     const clockName = splitText(fetchData);
     newInstance(clockName, offsetNum)
-
 }
+
 function createHour(offset) {
     const time = new Date();
     const utcHrs = time.getHours() - 2;
@@ -245,7 +240,6 @@ function createHour(offset) {
         case 38:
             hour = 14;
             break;
-
     }
     return hour;
 }
@@ -286,7 +280,6 @@ function newInstance(city, utcOffset) {
     localStorage.setItem('clocks', JSON.stringify(existingData));
 }
 
-
 function splitText(text) {
     if (text.indexOf(`/`) == -1) {
         let offsetNum = Number(text.slice(0, 3))
@@ -312,7 +305,6 @@ async function getData(data) {
         console.log(response.statusText);
     }
 }
-
 
 //stopwatch
 let stopwatchScreen = document.getElementById(`stopwatch-screen`);
@@ -415,5 +407,3 @@ stopwatchReset.addEventListener(`click`, () => {
 })
 
 startCount();
-
-
