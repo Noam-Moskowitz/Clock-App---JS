@@ -94,8 +94,13 @@ body {
 }
 
 #addClock,
-#removeClock {
+#removeClock,
+#cancel {
     display: none;
+}
+
+.action-btns {
+    width: 250px;
 }
 
 table {
@@ -113,6 +118,7 @@ tr {
 
 td {
     padding: 10px;
+    border-left: 1px dashed white;
 }
 
 .nav {

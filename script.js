@@ -53,9 +53,11 @@ function timer(duration) {
             let leftOverScnds = duration % 60;
             let hrs = Math.floor(durationInMins / 60)
             let leftOverMins = durationInMins % 60;
-            if (duration <= 0) {
-                stopTimer(timerInterval)
-                setTimeout(() => { alert(`Time's up!`) }, 1000)
+            if (duration == 0) {
+                alert(`Times Up!`)
+                clearInterval(timerInterval);
+                display(timerForm);
+                hide(timerScreen);
             }
             let timeToDisplay = `${hrs.toString().padStart(2, `0`)}:${leftOverMins.toString().padStart(2, `0`)}:${leftOverScnds.toString().padStart(2, `0`)}`;
             document.getElementById(`timer-screen`).textContent = timeToDisplay
@@ -74,7 +76,7 @@ document.getElementById(`startBtn`).addEventListener('click', (event) => {
     let hrsInSeconds = hrs * 60 * 60;
     let mnsInSeconds = mns * 60;
     let duration = hrsInSeconds + mnsInSeconds + Number(scnds)
-    timer(duration)
+    timer(duration + 1)
 })
 
 document.getElementById(`clearBtn`).addEventListener(`click`, () => {
@@ -103,6 +105,7 @@ const wcSubmit = document.getElementById(`wcSubmit`);
 const delBtn = document.getElementById(`del`);
 const addBtn = document.getElementById(`add`);
 const editBtn = document.getElementById(`edit`);
+const cancelBtn = document.getElementById(`cancel`);
 const addForm = document.getElementById(`addClock`);
 const deleteForm = document.getElementById(`removeClock`);
 
@@ -110,11 +113,13 @@ addBtn.addEventListener(`click`, () => {
     hide(addBtn);
     hide(editBtn);
     display(addForm);
+    display(cancelBtn);
 })
 editBtn.addEventListener(`click`, () => {
     hide(addBtn);
     hide(editBtn);
     display(deleteForm);
+    display(cancelBtn);
 })
 
 wcSubmit.addEventListener(`click`, (event) => {
@@ -122,6 +127,7 @@ wcSubmit.addEventListener(`click`, (event) => {
     addClock(event.target.form[0].value)
     event.target.form.reset()
     hide(addForm)
+    hide(cancelBtn)
     display(addBtn)
     display(editBtn)
 })
@@ -131,6 +137,14 @@ delBtn.addEventListener(`click`, (event) => {
     removeClock(event.target.form[0].value);
     event.target.form.reset()
     hide(deleteForm)
+    hide(cancelBtn)
+    display(addBtn)
+    display(editBtn)
+})
+cancelBtn.addEventListener(`click`, () => {
+    hide(deleteForm)
+    hide(addForm)
+    hide(cancelBtn)
     display(addBtn)
     display(editBtn)
 })
@@ -255,7 +269,7 @@ function displayClock() {
         let hour = createHour(clock.utcOffset).toString().padStart(2, `0`);
         html += `<tr>
          <td>${clock.city}</td>
-         <td>${hour}:${mns}:${scnds}</td>
+         <td style='text-align: center;'>${hour}:${mns}:${scnds}</td>
          </tr>`
         document.getElementById(`clocks-container`).innerHTML = html;
     }
