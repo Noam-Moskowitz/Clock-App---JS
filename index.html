@@ -12,7 +12,7 @@
     <title>Document</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style/style.css">
 </head>
 
 <body>
@@ -23,15 +23,15 @@
                     <div class="inputs d-flex">
                         <div class="input-container d-flex flex-column p-2 align-items-center">
                             <label for="hours">Hours</label>
-                            <input class="time-input" type="number" name="hours" id="hours">
+                            <input class="time-input" type="number" min="0" name="hours" id="hours">
                         </div>
                         <div class="input-container d-flex flex-column p-2 align-items-center">
                             <label for="minutes">Minutes</label>
-                            <input class="time-input" type="number" name="minutes" id="minutes">
+                            <input class="time-input" type="number" min="0" name="minutes" id="minutes">
                         </div>
                         <div class="input-container d-flex flex-column p-2 align-items-center">
                             <label for="seconds">Seconds</label>
-                            <input class="time-input" type="number" max="60" min="0" name="seconds" id="seconds">
+                            <input class="time-input" type="number" min="0" name="seconds" id="seconds">
                         </div>
                     </div>
                     <input id="startBtn" type="submit" class="btn btn-success" value="Start Timer">
@@ -410,7 +410,7 @@
         </div>
     </div>
 
-    <script type="module" src="script.js"></script>
+    <script type="module" src="./scripts/main.js"></script>
 </body>
 
 </html>

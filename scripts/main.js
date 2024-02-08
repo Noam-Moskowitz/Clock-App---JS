@@ -77,6 +77,7 @@ document.getElementById(`startBtn`).addEventListener('click', (event) => {
     let mnsInSeconds = mns * 60;
     let duration = hrsInSeconds + mnsInSeconds + Number(scnds)
     timer(duration + 1)
+    event.target.form.reset()
 })
 
 document.getElementById(`clearBtn`).addEventListener(`click`, () => {
@@ -100,7 +101,7 @@ resumeBtn.addEventListener(`click`, () => {
 })
 
 //worldClock
-import { Clock } from "./scripts/worldClock.js";
+import { Clock } from "./clockClass.js";
 const wcSubmit = document.getElementById(`wcSubmit`);
 const delBtn = document.getElementById(`del`);
 const addBtn = document.getElementById(`add`);
@@ -265,14 +266,17 @@ function displayClock() {
     const scnds = time.getSeconds().toString().padStart(2, `0`);
     let html = ``;
     let clocks = JSON.parse(localStorage.getItem(`clocks`));
-    for (let clock of clocks) {
-        let hour = createHour(clock.utcOffset).toString().padStart(2, `0`);
-        html += `<tr>
+    if (clocks) {
+        for (let clock of clocks) {
+            let hour = createHour(clock.utcOffset).toString().padStart(2, `0`);
+            html += `<tr>
          <td>${clock.city}</td>
          <td style='text-align: center;'>${hour}:${mns}:${scnds}</td>
          </tr>`
-        document.getElementById(`clocks-container`).innerHTML = html;
+            document.getElementById(`clocks-container`).innerHTML = html;
+        }
     }
+
 }
 
 function newInstance(city, utcOffset) {
