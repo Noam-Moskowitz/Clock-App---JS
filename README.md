@@ -60,7 +60,13 @@ To use the Clock App, follow these steps:
 
 ## Project Structure
 
-empty for now
+- The `index.html` file serves as the main HTML document.
+- `README.md` contains project documentation and information.
+- Inside the `style/` folder, you'll find `style.css`, which holds the project's CSS styles.
+- The `scripts/` directory contains the project's JavaScript files:
+    - `main.js` is the primary JavaScript file for the project.
+    - `clockClass.js` provides functionality related to the project's clock.
+- The `images/` folder holds various image files relevant to the project.
 
 ## Contributors
 
